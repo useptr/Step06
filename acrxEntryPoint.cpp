@@ -25,6 +25,7 @@
 #include "StdAfx.h"
 #include "resource.h"
 #include "ADSKEmployee.h"
+#include "EmployeeBuilder.h"
 #include "Tchar.h"
 //-----------------------------------------------------------------------------
 #define szRDS _RXST("ADSK")
@@ -49,7 +50,7 @@ public:
 			// Try to load the module, if it is not yet present 
 			if (!acrxDynamicLinker->loadModule(_T("AsdkEmployee.dbx"), 0))
 			{
-				acutPrintf(_T("Unable to load AsdkEmployeeDetails.dbx. Unloading this application...\n"));
+				acutPrintf(_T("Unable to load AsdkEmployee.dbx. Unloading this application...\n"));
 				return (AcRx::kRetError);
 			}
 		}
@@ -97,8 +98,8 @@ public:
 			return;
 		}
 		pBlockTable->close();
-		//ADSKEmployee* pEmployee = ADSKEmployee::create(firstName).withLastName(lastName).withID(id).withCube(cube).build();
-		ADSKEmployee* pEmployee = new ADSKEmployee;
+		ADSKEmployee* pEmployee = ADSKEmployee::create(firstName).withLastName(lastName).withID(id).withCube(cube).build();
+		//ADSKEmployee* pEmployee = new ADSKEmployee;
 		pEmployee->setID(id);
 		pEmployee->setCube(cube);
 		pEmployee->setFirstName(firstName);

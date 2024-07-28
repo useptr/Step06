@@ -47,6 +47,7 @@
 //-----------------------------------------------------------------------------
 #include "dbelipse.h"
 #define ASDKEMPLOYEE_DBXSERVICE _T("ASDKEMPLOYEE_DBXSERVICE")
+class EmployeeBuilder;
 //-----------------------------------------------------------------------------
 class DLLIMPEXP ADSKEmployee : public AcDbEllipse {
 
@@ -57,6 +58,8 @@ protected:
 	static Adesk::UInt32 kCurrentVersionNumber ;
 
 public:
+	friend class EmployeeBuilder;
+
 	ADSKEmployee () ;
 	virtual ~ADSKEmployee () ;
 
@@ -81,6 +84,9 @@ public:
 	Acad::ErrorStatus firstName(TCHAR*& firstName);
 	Acad::ErrorStatus setLastName(const TCHAR* lastName);
 	Acad::ErrorStatus lastName(TCHAR*& lastName);
+
+	//
+	static EmployeeBuilder create(const TCHAR* firstName);
 protected:
 	virtual Adesk::Boolean subWorldDraw (AcGiWorldDraw *mode) ;
 	virtual Adesk::UInt32 subSetAttributes (AcGiDrawableTraits *traits) ;
