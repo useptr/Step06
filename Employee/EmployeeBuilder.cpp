@@ -3,39 +3,39 @@
 #include "ADSKEmployee.h"
 #include "Tchar.h"
 
-EmployeeBuilder::EmployeeBuilder(const TCHAR* firstName)
+EmployeeBuilder::EmployeeBuilder(const TCHAR* aszFirstName) : m_pEmployee()
 {
-	m_employee = new ADSKEmployee;
-	m_employee->assertWriteEnabled();
-	if (m_employee->m_firstName)
-		free(m_employee->m_firstName);
-	m_employee->m_firstName = _tcsdup(firstName);
+	m_pEmployee.create();
+	m_pEmployee->assertWriteEnabled();
+	if (m_pEmployee->m_szFirstName)
+		free(m_pEmployee->m_szFirstName);
+	m_pEmployee->m_szFirstName = _tcsdup(aszFirstName);
 }
 
-EmployeeBuilder& EmployeeBuilder::withID(int id)
+EmployeeBuilder& EmployeeBuilder::withID(int anId)
 {
-	m_employee->assertWriteEnabled();
-	m_employee->m_ID = id;
+	m_pEmployee->assertWriteEnabled();
+	m_pEmployee->m_nID = anId;
 	return *this;
 }
 
-EmployeeBuilder& EmployeeBuilder::withCube(int cube)
+EmployeeBuilder& EmployeeBuilder::withCube(int anCube)
 {
-	m_employee->assertWriteEnabled();
-	m_employee->m_cube = cube;
+	m_pEmployee->assertWriteEnabled();
+	m_pEmployee->m_nCube = anCube;
 	return *this;
 }
 
-EmployeeBuilder& EmployeeBuilder::withLastName(const TCHAR* lastName)
+EmployeeBuilder& EmployeeBuilder::withLastName(const TCHAR* aszLastName)
 {
-	m_employee->assertWriteEnabled();
-	if (m_employee->m_lastName)
-		free(m_employee->m_lastName);
-	m_employee->m_lastName = _tcsdup(lastName);
+	m_pEmployee->assertWriteEnabled();
+	if (m_pEmployee->m_szLastName)
+		free(m_pEmployee->m_szLastName);
+	m_pEmployee->m_szLastName = _tcsdup(aszLastName);
 	return *this;
 }
 
-EmployeeBuilder ADSKEmployee::create(const TCHAR* firstName)
+EmployeeBuilder ADSKEmployee::create(const TCHAR* aszFirstName)
 {
-	return EmployeeBuilder(firstName);
+	return EmployeeBuilder(aszFirstName);
 }

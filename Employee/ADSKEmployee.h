@@ -76,25 +76,25 @@ public:
 	//- Graphics protocol
 
 		// Getters and Setters
-	Acad::ErrorStatus setID(const Adesk::Int32 ID);
-	Acad::ErrorStatus iD(Adesk::Int32& ID);
-	Acad::ErrorStatus setCube(const Adesk::Int32 cube);
-	Acad::ErrorStatus cube(Adesk::Int32& cube);
-	Acad::ErrorStatus setFirstName(const TCHAR* firstName);
-	Acad::ErrorStatus firstName(TCHAR*& firstName);
-	Acad::ErrorStatus setLastName(const TCHAR* lastName);
-	Acad::ErrorStatus lastName(TCHAR*& lastName);
+	Acad::ErrorStatus setID(const Adesk::Int32 anID);
+	Acad::ErrorStatus ID(Adesk::Int32& anID);
+	Acad::ErrorStatus setCube(const Adesk::Int32 anCube);
+	Acad::ErrorStatus cube(Adesk::Int32& anCube);
+	Acad::ErrorStatus setFirstName(const TCHAR* aszFirstName);
+	Acad::ErrorStatus firstName(TCHAR*& aszFirstName);
+	Acad::ErrorStatus setLastName(const TCHAR* aszLastName);
+	Acad::ErrorStatus lastName(TCHAR*& aszLastName);
 
 	//
-	static EmployeeBuilder create(const TCHAR* firstName);
+	static EmployeeBuilder create(const TCHAR* aszFirstName);
 protected:
-	virtual Adesk::Boolean subWorldDraw (AcGiWorldDraw *mode) ;
-	virtual Adesk::UInt32 subSetAttributes (AcGiDrawableTraits *traits) ;
+	virtual Adesk::Boolean subWorldDraw (AcGiWorldDraw *pMode) ;
+	virtual Adesk::UInt32 subSetAttributes (AcGiDrawableTraits *pTraits) ;
 private:
-	TCHAR* m_firstName;
-	TCHAR* m_lastName;
-	Adesk::Int32 m_ID;
-	Adesk::Int32 m_cube;
+	TCHAR* m_szFirstName;
+	TCHAR* m_szLastName;
+	Adesk::Int32 m_nID;
+	Adesk::Int32 m_nCube;
 } ;
 
 #ifdef EMPLOYEE_MODULE

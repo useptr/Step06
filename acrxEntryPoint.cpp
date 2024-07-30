@@ -24,6 +24,7 @@
 //-----------------------------------------------------------------------------
 #include "StdAfx.h"
 #include "resource.h"
+#include <functional>
 #include "ADSKEmployee.h"
 #include "EmployeeBuilder.h"
 #include "Tchar.h"
@@ -48,9 +49,9 @@ public:
 		if (!(pSvc = acrxServiceDictionary->at(ASDKEMPLOYEE_DBXSERVICE)))
 		{
 			// Try to load the module, if it is not yet present 
-			if (!acrxDynamicLinker->loadModule(_T("AsdkEmployee.dbx"), 0))
+			if (!acrxDynamicLinker->loadModule(_T("ADSKEmployee.dbx"), 0))
 			{
-				acutPrintf(_T("Unable to load AsdkEmployee.dbx. Unloading this application...\n"));
+				acutPrintf(_T("Unable to load ADSKEmployee.dbx. Unloading this application...\n"));
 				return (AcRx::kRetError);
 			}
 		}
@@ -74,47 +75,29 @@ public:
 	
 	static void AdskS6_CREATEEMPLOYEE(void)
 	{
-		int id, cube;
-		TCHAR firstName[128];
-		TCHAR lastName[128];
+		int nId, nCube;
+		TCHAR szFirstName[128];
+		TCHAR szLastName[128];
 		AcGePoint3d pt;
-		if (acedGetInt(_T("Enter employee ID: "), &id) != RTNORM
-			|| acedGetInt(_T("Enter cube: "), &cube) != RTNORM
-			|| acedGetString(0, _T("Enter first name: "), firstName) != RTNORM
-			|| acedGetString(0, _T("Enter last name: "), lastName) != RTNORM
+		if (acedGetInt(_T("Enter employee ID: "), &nId) != RTNORM
+			|| acedGetInt(_T("Enter cube: "), &nCube) != RTNORM
+			|| acedGetString(0, _T("Enter first name: "), szFirstName) != RTNORM
+			|| acedGetString(0, _T("Enter last name: "), szLastName) != RTNORM
 			|| acedGetPoint(NULL, _T("Employee position: "), asDblArray(pt)) != RTNORM
 			) {
 			return;
 		}
-		AcDbBlockTable* pBlockTable;
-		if (acdbHostApplicationServices()->workingDatabase()->getBlockTable(pBlockTable) != Acad::eOk) {
-			acutPrintf(_T("ERROR: Cannot open AcDbBlockTable"));
+		AcDbBlockTableRecordPointer pSpaceBlockTableRecord(acdbHostApplicationServices()->workingDatabase()->currentSpaceId(), AcDb::kForWrite);
+		if (pSpaceBlockTableRecord.openStatus() != Acad::eOk) {
+			acutPrintf(_T("\nERROR: Cannot open BlockTableRecord for write"));
 			return;
 		}
-		AcDbBlockTableRecord* pSpaceBlockTableRecord;
-		if (pBlockTable->getAt(ACDB_MODEL_SPACE, pSpaceBlockTableRecord, AcDb::kForWrite) != Acad::eOk) {
-			pBlockTable->close();
-			acutPrintf(_T("ERROR: Cannot open AcDbBlockTable for write"));
-			return;
-		}
-		pBlockTable->close();
-		ADSKEmployee* pEmployee = ADSKEmployee::create(firstName).withLastName(lastName).withID(id).withCube(cube).build();
-		//ADSKEmployee* pEmployee = new ADSKEmployee;
-		pEmployee->setID(id);
-		pEmployee->setCube(cube);
-		pEmployee->setFirstName(firstName);
-		pEmployee->setLastName(lastName);
-
+		AcDbObjectPointer<ADSKEmployee> pEmployee = std::move(ADSKEmployee::create(szFirstName).withLastName(szLastName).withID(nId).withCube(nCube)); // TODO improve
 		AcDbObjectId idObj;
 		if (pSpaceBlockTableRecord->appendAcDbEntity(idObj, pEmployee) != Acad::eOk) {
-			delete pEmployee;
-			pSpaceBlockTableRecord->close();
-			acutPrintf(_T("ERROR: Cannot appendAcDbEntity to AcDbBlockTableRecord"));
+			acutPrintf(_T("ERROR: Cannot append ADSKEmployee to BlockTable"));
 			return;
 		}
-		pEmployee->close();
-		pSpaceBlockTableRecord->close();
-
 	}
 	
 } ;

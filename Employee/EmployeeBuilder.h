@@ -1,15 +1,19 @@
 #pragma once
 #include "ADSKEmployee.h"
 #include "Tchar.h"
-class EmployeeBuilder
+#include <utility>
+class EmployeeBuilder // TODO rule of 5
 {
 public:
-	EmployeeBuilder(const TCHAR* firstName);
-	EmployeeBuilder& withID(int id);
-	EmployeeBuilder& withCube(int cube);
-	EmployeeBuilder& withLastName(const TCHAR* lastName);
-	//operator ADSKEmployee* () const { return m_employee; }
-	ADSKEmployee* build() const { return m_employee; }
+	using pointer = AcDbObjectPointer<ADSKEmployee>;
+	EmployeeBuilder(const TCHAR* aszfirstName);
+	EmployeeBuilder& withID(int anId);
+	EmployeeBuilder& withCube(int anCube);
+	EmployeeBuilder& withLastName(const TCHAR* aszLastName);
+	operator AcDbObjectPointer<ADSKEmployee>()  { return std::move(m_pEmployee); }
+	//auto build() -> pointer {
+	//	return std::move(m_pEmployee);
+	//}
 private:
-	ADSKEmployee* m_employee;
+	pointer m_pEmployee; // TODO maybe store ADSKEmployee and return copy, 
 };
